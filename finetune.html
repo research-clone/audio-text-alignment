@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Forced Alignment, an HTML interface for fine tuning alignment audio with text</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="./css/finetune.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+    <link rel='stylesheet' href='./css/bootstrap.css'>
+    <!-- <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+</head>
+
+<body>
+<!-- BEGIN container -->
+<div class="container-fluid">
+    <!-- BEGIN directions -->
+    <div class="row b-header">
+        <div class="col-sm">
+            <p class="logo-text">Audio-to-Text Alignment</p>
+            <!-- BEGIN player -->
+            <div id="player">
+                <audio controls id="audioplayer" src="" ontimeupdate="ticker(this.currentTime);"></audio>
+                <div id="sectionScrubberContainer">
+                  <input id="playerprogress" type="range" step="0.01" value="0" min="0" max="100"/>
+                  <span id="sectionTimer">0.000 / 0.000</span>
+                </div>
+                &emsp;&emsp;
+                <span id="step1">
+                  <label class="btn btn-secondary">
+                    Select Audio <input type="file" name= "audio" multiple id="audioinput" accept="audio/*" autocomplete="off" style="display: none;"/>
+                  </label>
+                  <span id="audioLabel"></span>
+                </span>
+
+                <span id="step2">
+                    <label class="btn btn-secondary">
+                      Select JSON <input type="file" name="json" multiple id="fileinput" accept=".json" autocomplete="off" style="display: none;"/>
+                    </label>
+                    <span id="jsonLabel"></span>
+                </span>
+                
+                &emsp;&emsp;
+
+                <span id="step3">
+                <select name="outputFormat" id="outputFormat" style="display:block;margin-top:5px;margin-bottom:5px;">
+                    <option value="csv">CSV</option>
+                    <option value="json" selected="selected">JSON</option>
+                    <option value="smil">SMIL</option>
+                    <option value="srt">SRT</option>
+                    <option value="ssv">SSV</option>
+                    <option value="ttml">TTML</option>
+                    <option value="tsv">TSV</option>
+                    <option value="txt">TXT</option>
+                    <option value="vtt">VTT</option>
+                    <option value="xml">XML</option>
+                </select>
+                <input id="smilAudioRef" style="display:none" type="text" placeholder="audio_ref"/>
+                <input id="smilPageRef" style="display:none" type="text" placeholder="page_ref"/>
+                <!-- <button class="btn btn-primary btn-sm" id="download" style="display:block;margin-top:5px;margin-bottom:5px;">Save</button> -->
+                </span>
+                &emsp;
+                <span id="step4">
+                    <button class="btn btn-primary btn-sm" id="download" style="display:block;margin-top:5px;margin-bottom:5px;">Save</button>
+                </span>
+                &emsp;&emsp;&emsp;&emsp;
+                <span id="step6">
+                    <button class="btn btn-primary btn-sm" id="load_previous_file" style="display:block;margin-top:5px;margin-bottom:5px;">&laquo;Previous</button>
+                </span>
+                &emsp;
+                <span id="step5">
+                    <button class="btn btn-primary btn-sm" id="load_next_file" style="display:block;margin-top:5px;margin-bottom:5px;">Next&raquo;</button>
+                </span>
+            </div>
+
+        </div>
+    </div>
+    <!-- END directions -->
+    <div class="row b-content">
+        <div class="col-3">
+            <div class="settings">
+                <label for="timeStep" style="display:block">Time increment (s):</label>
+                <input id="timeStep" type="number" min="0.010" step="0.010" value="0.100" style="display:block"/>
+                <label for="couple" style="display:block">Couple ends/starts:</label>
+                <button class="btn btn-primary btn-sm" id="couple" style="display:block">OFF</button>
+                <label for="couple1" style="display:block">Couple starts/ends:</label>
+                <button class="btn btn-primary btn-sm" id="couple1" style="display:block">OFF</button>
+                <label for="buttonShowID" style="display:block">Show ID:</label>
+                <button class="btn btn-primary btn-sm" id="buttonShowID" style="display:block">OFF</button>
+                <!-- <label for="alignText" style="display:block">Text alignment:</label> 
+                <select name="alignText" id="alignText" style="display:block"> 
+                    <option value="left">Left</option>
+                    <option value="center" selected="selected">Center</option>
+                    <option value="right">Right</option>
+                    <option value="justify">Justify</option>
+                </select>  -->
+                <hr style="display:block"/>
+                <label for="playbackRate" style="display:block">Playback rate:</label>
+                <input id="playbackRate" type="number" min="0.1" max="4.0" step="0.1" value="1.0"
+                       style="display:block"/>
+                <label for="buttonContinuousPlay">Continuous play:</label>
+                <button class="btn btn-primary btn-sm" id="buttonContinuousPlay" style="display:block">OFF</button>
+                <label for="buttonTimeFormat" style="display:block">Time format:</label>
+                <button class="btn btn-primary btn-sm" id="buttonTimeFormat" style="display:block">DECIMAL</button>
+                <label for="transitionOffset" style="display:block">Transition offset (s):</label>
+                <input id="transitionOffset" type="number" min="0" max="0.400" step="0.010" value="0.100"
+                       style="display:block"/>
+                <label for="playWindowTime" style="display:block">Play window time (s):</label>
+                <input id="playWindowTime" type="number" min="0.1" max="100" step="0.10" value="2.0"
+                       style="display:inline-block"/>
+                <button class="btn btn-primary btn-sm" id="buttonPlayWindow" style="display:inline-block">OFF</button>
+                <hr style="display:block"/>
+
+            </div>
+        </div>
+        <div class="col-sm">
+            <div id="tb" class="tg"></div>
+        </div>
+    </div>
+
+</div>
+<!-- END container -->
+<!-- BEGIN script -->
+<script type="text/javascript" src="./js/finetune.js"></script>
+<!-- END script -->
+</body>
+
+</html>
+
+
+<!--  need remove listener  -->
