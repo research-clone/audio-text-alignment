@@ -3,14 +3,12 @@
                     */
 var fragments = [];
 var currentIndex = 0;
-//------------------------------------------
 var audioFiles = []
 var jsonFiles = []
 var idx = 0
 var _idx = 0
 var audioName = ''
 var dictionary = {}
-// -----------------------------------------
 var audioElement = document.getElementById("audioplayer");
 var ainfo = "";
 var cinfo = "";
@@ -138,9 +136,9 @@ function progressInput(e) {
 
 //  this function is to NEXT button----------------------------
 function previousAudioAndJson() {
-    if (jsonFiles.length != audioFiles.length) {
-        alert("json length and audio length must be the same")
-    } else {
+    // if (jsonFiles.length != audioFiles.length) {
+    //     alert("json length and audio length must be the same")
+    // } else {
         if (idx > 0) {
             idx -= 1
         } else {
@@ -159,12 +157,12 @@ function previousAudioAndJson() {
         if (jsonFile) {
             loadJSON(jsonFile);
         }
-    }
+    // }
 }
 function nextAudioAndJson() {
-    if (jsonFiles.length != audioFiles.length) {
-        alert("json length and audio length must be the same")
-    } else {
+    // if (jsonFiles.length != audioFiles.length) {
+    //     alert("json length and audio length must be the same")
+    // } else {
         if (idx < audioFiles.length) {
             idx += 1
         } else {
@@ -183,7 +181,7 @@ function nextAudioAndJson() {
         if (jsonFile) {
             loadJSON(jsonFile);
         }
-    }
+    // }
 }
 // i add to audio process ---------------------------------------
 
@@ -229,14 +227,13 @@ function loadAudio(audioFilePath) {
 // --------------------------------------------------
 function jsonDict(jsonFiles) {
     for (var i = 0; i < jsonFiles.length; i++) {
-        // console.log("ahihi",i)
-        dictionary[jsonFiles[i].name.slice(0, -4)] = i;
+        dictionary[jsonFiles[i].name.slice(0, -5)] = i;
     }
 }
 function buttonLoadJSON(evt) {
     // idx = 0;
     jsonFiles = evt.target.files;
-    jsonDict(audioFiles);
+    jsonDict(jsonFiles);
     _index = dictionary[audioName]
     jsonFile = jsonFiles[_index];
 
