@@ -612,10 +612,10 @@ function changeTime(evt, step) {
             do {
                 thisFragment = fragments[j]
             }while (!thisFragment);
-            thisFragment.end = fragments[i].begin + step;
+            thisFragment.end = fragments[i].end + step;
             updateTime(j, "end");
         }
-        if (couple) {
+        if (couple && (i>0)) {
             let prevFragment, j = i - 1;
             do {
                 prevFragment = fragments[j];
@@ -638,7 +638,7 @@ function changeTime(evt, step) {
             do {
                 thisFragment = fragments[j];
             } while (!thisFragment);
-            thisFragment.begin = fragments[i].end - step;
+            thisFragment.begin = fragments[i].begin + step;
             updateTime(j, "begin");
         }
         if (couple && (i + 1 < fragments.length)) {
